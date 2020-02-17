@@ -1,18 +1,17 @@
 //libraries
 #include "pitches.h"
 #include "SevSeg.h"
-
 SevSeg sevseg; 
 
 // notes in the melody:
 int melody[] = {NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4};
 int melodyStart[] = {NOTE_DS6, NOTE_DS5, NOTE_AS5, NOTE_GS5, NOTE_DS5, NOTE_DS6, NOTE_AS6, NOTE_AS5};
 
+//notes for each colour led
 int melodyRed = NOTE_DS3;
 int melodyBlue = NOTE_DS4;
 int melodyGreen = NOTE_DS5;
 int melodyYellow = NOTE_DS6;
-
 
 // note durations: 4=1/4 note, 8=1/8 note
 int noteDurations[] = {4, 8, 8, 4, 4, 4, 4, 4};
@@ -20,10 +19,21 @@ int noteDurations[] = {4, 8, 8, 4, 4, 4, 4, 4};
 // length of the timer
 int timerLength = 5;
 
+//pins for the rgb led
+int red_light_pin= 11;
+int green_light_pin = 12;
+int blue_light_pin = 13;
+
 void setup()
 {
- startUpMelody();
+  //calls method that plays a melody when device is turned on.
+  startUpMelody();
 
+  //output for rgb led
+  pinMode(red_light_pin, OUTPUT);
+  pinMode(green_light_pin, OUTPUT);
+  pinMode(blue_light_pin, OUTPUT);
+  
   //set up for the singular digit display
   byte numDigits = 1;
   byte digitPins[] = {};
@@ -33,9 +43,51 @@ void setup()
   byte hardwareConfig = COMMON_CATHODE; 
   sevseg.begin(hardwareConfig, numDigits, digitPins, segmentPins, resistorsOnSegments);
   sevseg.setBrightness(90);
+
+  //Selecting PWM output pins for rgb light.
+  pinMode(11,OUTPUT);
+  pinMode(12,OUTPUT);
+  pinMode(13,OUTPUT);
+  Serial.begin(9600);
 }
 
 void loop() 
+{
+  rgbFlow(); 
+ 
+}
+
+//deals with creating a rainbow like effect
+void rgbFlow() 
+{
+  RGB_color(255, 0, 0); // Red
+  delay(1000);
+  RGB_color(0, 255, 0); // Green
+  delay(1000);
+  RGB_color(0, 0, 255); // Blue
+  delay(1000);
+  RGB_color(255, 255, 125); // Raspberry
+  delay(1000);
+  RGB_color(0, 255, 255); // Cyan
+  delay(1000);
+  RGB_color(255, 0, 255); // Magenta
+  delay(1000);
+  RGB_color(255, 255, 0); // Yellow
+  delay(1000);
+  RGB_color(255, 255, 255); // White
+  delay(1000);
+}
+
+//deals with analog
+void RGB_color(int red_light_value, int green_light_value, int blue_light_value)
+ {
+  analogWrite(red_light_pin, red_light_value);
+  analogWrite(green_light_pin, green_light_value);
+  analogWrite(blue_light_pin, blue_light_value);
+}
+
+//deals with counting down from a certain value
+void timer(int timerLength )
 {
   //Timer counting down from whatever value it is given
   for(int i = timerLength; i > -1; i--)
