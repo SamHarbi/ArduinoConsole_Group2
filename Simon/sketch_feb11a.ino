@@ -1,7 +1,6 @@
 /*
  * Simon The Game Version 1.0
- * Currently this game can use up 4 LEDS and 4 Buttons. Due to limitations in available hardware no other input sources are available
- * v1.0 Sameer Al Harbi 15/02/2020
+ * v2 Joystick_Alpha
  */
 const int ib_1 = 1;
 int ib_1_state;
@@ -12,6 +11,10 @@ int ib_3_state;
 const int ib_4 = 4;
 int ib_4_state;
 
+const int rgb_1 = 10;
+const int rgb_2 = 11;
+const int rgb_3 = 12;
+
 const int ol_1 = 5;
 const int ol_2 = 6;//output light
 const int ol_3 = 7;
@@ -19,7 +22,8 @@ const int ol_4 = 8;
 
 const int buzzer_1 = 9;
 
-const int joystick_1 = A0;//joystick
+const int joystick_1 = A4;//joystick
+const int joystick_2 = A5;
 
 int randomInt = 0;
 boolean start = false;
@@ -33,28 +37,26 @@ void setup() {
   pinMode(ib_3,INPUT);
   pinMode(ib_4,INPUT);
 
-  pinMode(joystick_1,INPUT);
-
   pinMode(ol_1,OUTPUT);
   pinMode(ol_2,OUTPUT);
   pinMode(ol_3,OUTPUT);
   pinMode(ol_4,OUTPUT);
   
-  
 }
+
 
 void loop() {
   // put your main code here, to run repeatedly:
-
-  ib_1_state = digitalRead(ib_1);
-  if(ib_1_state==HIGH)
+  
+  ib_3_state = digitalRead(ib_3);
+  if(ib_3_state==HIGH)
   {
     start = true;
   }
 
   if(start==true)
   {
-    randomInt = random(0,3);
+    randomInt = random(0,4);
 
     switch(randomInt)
     {
@@ -63,10 +65,12 @@ void loop() {
       delay(diff);
       for(int i=0;i<diff;i++)
       {
-        ib_1_state = digitalRead(ib_1);
+        ib_1_state = analogRead(joystick_1);
+        ib_2_state = analogRead(joystick_2);//y
       
-      if(ib_1_state==HIGH)
+      if(ib_1_state>=700&&ib_2_state>=511)
       {
+        i = diff;
         digitalWrite(ol_1,HIGH);
         digitalWrite(ol_2,HIGH);
         digitalWrite(ol_3,HIGH);
@@ -81,10 +85,12 @@ void loop() {
       delay(diff);
       for(int i=0;i<diff;i++)
       {
-        ib_2_state = digitalRead(ib_2);
+        ib_1_state = analogRead(joystick_1);
+        ib_2_state = analogRead(joystick_2);
       
-      if(ib_2_state==HIGH)
+      if(ib_1_state>=511&&ib_2_state>=700)
       {
+        i = diff;
         digitalWrite(ol_1,HIGH);
         digitalWrite(ol_2,HIGH);
         digitalWrite(ol_3,HIGH);
@@ -94,15 +100,17 @@ void loop() {
       }
       break;
 
-      case 2:
+      case 2://red
       digitalWrite(ol_3,HIGH);
       delay(diff);
       for(int i=0;i<diff;i++)
       {
-        ib_3_state = digitalRead(ib_3);
+        ib_1_state = analogRead(joystick_1);
+        ib_2_state = analogRead(joystick_2);//y
       
-      if(ib_3_state==HIGH)
+      if(ib_1_state<=500&&ib_2_state>=500)
       {
+        i = diff;
         digitalWrite(ol_1,HIGH);
         digitalWrite(ol_2,HIGH);
         digitalWrite(ol_3,HIGH);
@@ -117,10 +125,12 @@ void loop() {
       delay(diff);
       for(int i=0;i<diff;i++)
       {
-        ib_4_state = digitalRead(ib_4);
+        ib_1_state = analogRead(joystick_1);
+        ib_2_state = analogRead(joystick_2);
       
-      if(ib_4_state==HIGH)
+      if(ib_2_state<=500&&ib_1_state>=500)
       {
+        i = diff;
         digitalWrite(ol_1,HIGH);
         digitalWrite(ol_2,HIGH);
         digitalWrite(ol_3,HIGH);
@@ -134,6 +144,8 @@ void loop() {
         digitalWrite(ol_2,LOW);
         digitalWrite(ol_3,LOW);
         digitalWrite(ol_4,LOW);
+        ib_1_state = 0;
+        ib_2_state = 0;
   }
 
   
