@@ -1,33 +1,33 @@
 /*
  * Simon The Game Version 1.0
- * v2 Joystick_Alpha
+ * v2.1 Pre-Release Versio
+ * Sameer Al Harbi
  */
 const int ib_1 = 1;
 int ib_1_state;
-const int ib_2 = 2;//input button
+const int ib_2 = 2;
 int ib_2_state;
-const int ib_3 = 3;
+const int ib_3 = 3;//Start Button
 int ib_3_state;
 const int ib_4 = 4;
 int ib_4_state;
 
-const int rgb_1 = 10;
-const int rgb_2 = 11;
-const int rgb_3 = 12;
-
 const int ol_1 = 5;
-const int ol_2 = 6;//output light
+const int ol_2 = 6;//output lights
 const int ol_3 = 7;
 const int ol_4 = 8;
 
 const int buzzer_1 = 9;
 
-const int joystick_1 = A4;//joystick
-const int joystick_2 = A5;
+const int joystick_1 = A4;//joystick x
+int joyState_x;
+const int joystick_2 = A5;//joystick y
+int joyState_y;
+
 
 int randomInt = 0;
 boolean start = false;
-int diff = 500;
+int diff = 650;
 
 
 void setup() {
@@ -58,19 +58,19 @@ void loop() {
   {
     randomInt = random(0,4);
 
-    switch(randomInt)
+    switch(randomInt)//check random value
     {
-      case 0:
-      digitalWrite(ol_1,HIGH);
+      case 0://led 1
+      digitalWrite(ol_1,HIGH);//turn on led
       delay(diff);
-      for(int i=0;i<diff;i++)
+      for(int i=0;i<diff;i++)//get user input for diff milisecs
       {
-        ib_1_state = analogRead(joystick_1);
-        ib_2_state = analogRead(joystick_2);//y
+        joyState_x = analogRead(joystick_1);//x
+        joyState_y = analogRead(joystick_2);//y
       
-      if(ib_1_state>=700&&ib_2_state>=511)
+      if(joyState_x>=700&&joyState_y>=511)//analog vale check
       {
-        i = diff;
+        i = diff;//stop for loop
         digitalWrite(ol_1,HIGH);
         digitalWrite(ol_2,HIGH);
         digitalWrite(ol_3,HIGH);
@@ -80,15 +80,15 @@ void loop() {
       }
       break;
 
-      case 1:
+      case 1://led 2
       digitalWrite(ol_2,HIGH);
       delay(diff);
       for(int i=0;i<diff;i++)
       {
-        ib_1_state = analogRead(joystick_1);
-        ib_2_state = analogRead(joystick_2);
-      
-      if(ib_1_state>=511&&ib_2_state>=700)
+         joyState_x = analogRead(joystick_1);//x
+         joyState_y = analogRead(joystick_2);//y
+         
+      if(joyState_x>=511&&joyState_y>=700)
       {
         i = diff;
         digitalWrite(ol_1,HIGH);
@@ -100,15 +100,15 @@ void loop() {
       }
       break;
 
-      case 2://red
+      case 2://led 3
       digitalWrite(ol_3,HIGH);
       delay(diff);
       for(int i=0;i<diff;i++)
       {
-        ib_1_state = analogRead(joystick_1);
-        ib_2_state = analogRead(joystick_2);//y
+        joyState_x = analogRead(joystick_1);//x
+        joyState_y = analogRead(joystick_2);//y
       
-      if(ib_1_state<=500&&ib_2_state>=500)
+      if(joyState_x<=500&&joyState_y>=500)
       {
         i = diff;
         digitalWrite(ol_1,HIGH);
@@ -120,15 +120,15 @@ void loop() {
       }
       break;
 
-      case 3:
+      case 3://led 4
       digitalWrite(ol_4,HIGH);
       delay(diff);
       for(int i=0;i<diff;i++)
       {
-        ib_1_state = analogRead(joystick_1);
-        ib_2_state = analogRead(joystick_2);
+        joyState_x = analogRead(joystick_1);//x
+        joyState_y = analogRead(joystick_2);//y
       
-      if(ib_2_state<=500&&ib_1_state>=500)
+      if(joyState_x<=500&&joyState_y>=500)
       {
         i = diff;
         digitalWrite(ol_1,HIGH);
@@ -140,6 +140,7 @@ void loop() {
       }
       break;
     }
+        //clear all
         digitalWrite(ol_1,LOW);
         digitalWrite(ol_2,LOW);
         digitalWrite(ol_3,LOW);
