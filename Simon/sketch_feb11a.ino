@@ -19,9 +19,9 @@ const int ol_4 = 8;
 
 const int buzzer_1 = 9;
 
-const int joystick_1 = A4;//joystick x
+const int joystick_1 = A2;//joystick x
 int joyState_x;
-const int joystick_2 = A5;//joystick y
+const int joystick_2 = A3;//joystick y
 int joyState_y;
 
 
